@@ -11,7 +11,7 @@ The TCR runtime is implemented as a multi-module runtime with following two modu
 
 ### Step 0
 
-If you are new to Parity Substrate, first please go through the getting started tutorial [here](https://substrate.readme.io/docs/creating-a-custom-substrate-chain). It will give you a sense of how the code is structured in a node-template and how to get it up and running.
+If you are new to [Substrate](https://www.parity.io/substrate/), please go through the [getting started tutorial](https://substrate.readme.io/docs/creating-a-custom-substrate-chain) first. It will give you a sense of how the code is structured in a `substrate-node-template` and how to get it up and running.
 
 This will also ensure that you have Rust and Substrate installed on your system.
 
@@ -19,16 +19,16 @@ This will also ensure that you have Rust and Substrate installed on your system.
 
 Clone this repository. Inside the directory where you have cloned, run the following commands,
 
-* To build the rust code and the node,
-
-```
-cargo build --release
-```
-
-* To build the `WASM` runtime for the node,
+* To build the `WASM` runtime for the node (**IMP: run this first**),
 
 ```
 ./build.sh
+```
+
+* To build the rust code and the node (**IMP: run this after `./build.sh` completes**),
+
+```
+cargo build --release
 ```
 
 * To start the node
