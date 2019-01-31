@@ -19,13 +19,13 @@ This will also ensure that you have Rust and Substrate installed on your system.
 
 Clone this repository. Inside the directory where you have cloned, run the following commands,
 
-* To build the `WASM` runtime for the node (**IMP: run this first**),
+* To build the `WASM` runtime for the node (**run this first**),
 
 ```
 ./build.sh
 ```
 
-* To build the rust code and the node (**IMP: run this after `./build.sh` completes**),
+* To build the rust code and the node (**run this after `./build.sh` completes**),
 
 ```
 cargo build --release
@@ -49,9 +49,9 @@ As of now, there is no dedicated UI built for this runtime. But you can still tr
 https://polkadot.js.org/apps/
 ```
 
-* Go to setting and select `Local Node` in the `remote node/endpoint to connect to` drop down. Click save and reload.
+* Go to the settings page and select `Local Node` in the `remote node/endpoint to connect to` drop down. Click save and reload.
 
-For more instructions on using the runtime with the Polkadot Apps UI, please see the [wiki in this repository](https://github.com/gautamdhameja/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal).
+For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/gautamdhameja/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
 
 ## Important Note
 
