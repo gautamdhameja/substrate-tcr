@@ -33,12 +33,12 @@ pub use substrate_cli::{VersionInfo, IntoExit, error};
 
 fn run() -> cli::error::Result<()> {
 	let version = VersionInfo {
-		name: "Substrate Node",
+		name: "Substrate TCR",
 		commit: env!("VERGEN_SHA_SHORT"),
 		version: env!("CARGO_PKG_VERSION"),
 		executable_name: "tcr",
 		author: "gautamdhameja",
-		description: "tcr",
+		description: "Token Curated Registry runtime",
 	};
 	cli::run(::std::env::args(), cli::Exit, version)
 }
