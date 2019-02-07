@@ -177,7 +177,7 @@ decl_module! {
       <PollNonce<T>>::put(poll_nonce + 1);
 
       // raise the event
-      Self::deposit_event(RawEvent::Challenged(sender, listing_hash, deposit));
+      Self::deposit_event(RawEvent::Challenged(sender, listing_hash, poll_nonce, deposit));
       runtime_io::print("Challenge created!");
 
       Ok(())
@@ -398,7 +398,7 @@ decl_event!(
       // when a listing is proposed
       Proposed(AccountId, Hash, Balance),
       // when a listing is challenged
-      Challenged(AccountId, Hash, Balance),
+      Challenged(AccountId, Hash, u32, Balance),
       // when a challenge is voted on
       Voted(AccountId, u32, Balance),
       // when a challenge is resolved
