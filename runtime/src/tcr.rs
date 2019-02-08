@@ -5,6 +5,9 @@ use srml_support::{dispatch::Result, StorageMap, StorageValue};
 use {balances, system::ensure_signed, timestamp};
 use token;
 
+// Read TCR concepts here
+// https://www.gautamdhameja.com/token-curated-registries-explain-eli5-a5d4cce0ddbe/
+
 // the module trait
 pub trait Trait: timestamp::Trait + balances::Trait + token::Trait {
   type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
@@ -156,8 +159,8 @@ decl_module! {
 
       let poll = Poll {
         listing_hash,
-        votes_for: <T::Balance as As<u64>>::sa(0),
-        votes_against: <T::Balance as As<u64>>::sa(0),
+        votes_for: listing.deposit,
+        votes_against: deposit,
         passed: false,
       };
 
