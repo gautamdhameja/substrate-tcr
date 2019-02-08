@@ -1,6 +1,6 @@
 # Substrate - Token Curated Registries
 
-An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate-node-template) codebase.
+An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase.
 
 The TCR runtime is implemented as a multi-module runtime with following two modules.
 
@@ -39,9 +39,11 @@ cargo build --release
 
 The TCR runtime should be up in the local substrate node running at `localhost:9944`.
 
-### Step 2
+### Step 2 (UI)
 
-As of now, there is no dedicated UI built for this runtime. But you can still try it out using the [Polkadot Apps UI](https://polkadot.js.org/apps/).
+You can either use the [Substrate-TCR-UI](https://github.com/gautamdhameja/substrate-tcr-ui) to connect with this runtime or you can try it out using the [Polkadot Apps UI](https://polkadot.js.org/apps/).
+
+To try it with the [Polkadot Apps UI](https://polkadot.js.org/apps/), follow the following steps,
 
 * Once the local node is running, open the following in your browser,
 
@@ -49,10 +51,10 @@ As of now, there is no dedicated UI built for this runtime. But you can still tr
 https://polkadot.js.org/apps/
 ```
 
-* Go to the settings page and select `Local Node` in the `remote node/endpoint to connect to` drop down. Click save and reload.
+* Go to the settings page and select `Local Node` in the `remote node/endpoint to connect to` input. Click `Save & Reload`.
 
 For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/gautamdhameja/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
 
 ## Important Note
 
- The Substrate framework and related libraries and APIs are rapidly under development. In case this module does not work with the latest Substrate build, please submit an issue in this repo. You can also try porting the runtime modules into a freshly cloned [substrate-node-template](https://github.com/paritytech/substrate-node-template) codebase.
+ The Substrate framework and related libraries and APIs are rapidly under development. In case this module does not work with the latest Substrate build, please submit an issue in this repo. You can also try porting the runtime modules into a freshly cloned [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase.
