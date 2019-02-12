@@ -55,6 +55,11 @@ https://polkadot.js.org/apps/
 
 For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/parity-samples/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
 
-## Important Note
+### Important Note
 
- The Substrate framework and related libraries and APIs are rapidly under development. In case this module does not work with the latest Substrate build, please submit an issue in this repo. You can also try porting the runtime modules into a freshly cloned [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase.
+The Substrate framework, related libraries and APIs are rapidly evolving. In case this module does not work with the latest Substrate build, please submit an issue in this repo.
+You can also try porting the runtime module into a freshly cloned `substrate-node-template` codebase.
+
+### Important Note 2
+
+This code is just a sample for learning purposes. It is not audited and reviewed for production use cases. You can expect bugs and security vulnerabilities. Do **not** use it as-is in real applications.
