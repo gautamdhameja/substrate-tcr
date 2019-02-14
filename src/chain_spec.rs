@@ -106,6 +106,7 @@ fn testnet_genesis(initial_authorities: Vec<Ed25519AuthorityId>, endowed_account
 			total_supply: 21000000,
 		}),
 		tcr: Some(TcrConfig {
+			owner: ed25519::Pair::from_seed(b"Alice                           ").public().0.into(),
 			// min deposit for proposals
 			min_deposit: 100,
 			// challenge time limit - for testing its set to 2 mins (120 sec)
