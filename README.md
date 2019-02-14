@@ -34,7 +34,7 @@ cargo build --release
 * To start the node
 
 ```
-./target/release/tcr --dev
+./target/release/substrate-tcr --dev
 ```
 
 The TCR runtime should be up in the local substrate node running at `localhost:9944`.
