@@ -27,14 +27,21 @@ decl_module! {
       // once this is done, then transfer_from can be called with corresponding values
       fn approve(origin, spender: T::AccountId, value: T::TokenBalance) -> Result {
           let sender = ensure_signed(origin)?;
+          // make sure the approver/owner owns this token
           ensure!(<BalanceOf<T>>::exists(&sender), "Account does not own this token");
 
+          // get the current value of the allowance for this sender and spender combination
+          // if doesnt exist then default 0 will be returned
           let allowance = Self::allowance((sender.clone(), spender.clone()));
+          
+          // add the value to the current allowance
           // using checked_add (safe math) to avoid overflow
           let updated_allowance = allowance.checked_add(&value).ok_or("overflow in calculating allowance")?;
 
+          // insert the new allownace value of this sender and spender combination
           <Allowance<T>>::insert((sender.clone(), spender.clone()), updated_allowance);
-
+          
+          // raise the approval event
           Self::deposit_event(RawEvent::Approval(sender, spender, value));
           Ok(())
       }
