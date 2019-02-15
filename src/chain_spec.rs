@@ -102,7 +102,7 @@ fn testnet_genesis(initial_authorities: Vec<Ed25519AuthorityId>, endowed_account
 			key: root_key,
 		}),
 		token: Some(TokenConfig {
-			// setting total supply of erc20 tokens to 21M because `Satoshi` said so
+			// setting total supply of tokens to 21M because `Satoshi` said so
 			total_supply: 21000000,
 		}),
 		tcr: Some(TcrConfig {
