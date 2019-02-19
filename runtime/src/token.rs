@@ -1,3 +1,8 @@
+/// runtime module implementing the ERC20 token interface
+/// with added lock and unlock functions for staking in TCR runtime
+/// implements a custom type `TokenBalance` for representing account balance
+/// `TokenBalance` type is exactly the same as the `Balance` type in `balances` SRML module
+
 use rstd::prelude::*;
 use parity_codec::Codec;
 use support::{dispatch::Result, StorageMap, Parameter, StorageValue, decl_storage, decl_module, decl_event, ensure};
@@ -51,9 +56,10 @@ decl_module! {
           ensure!(<Allowance<T>>::exists((from.clone(), to.clone())), "Allowance does not exist.");
           let allowance = Self::allowance((from.clone(), to.clone()));
           ensure!(allowance >= value, "Not enough allowance.");
+
           // using checked_sub (safe math) to avoid overflow
           let updated_allowance = allowance.checked_sub(&value).ok_or("overflow in calculating allowance")?;
-
+          // insert the new allownace value of this sender and spender combination
           <Allowance<T>>::insert((from.clone(), to.clone()), updated_allowance);
 
           Self::deposit_event(RawEvent::Approval(from.clone(), to.clone(), value));
@@ -102,7 +108,7 @@ impl<T: Trait> Module<T> {
     // transfers the total_supply amout to the caller
     // the token becomes usable
     // not part of ERC20 standard interface
-    // replicates the ERC20 smart contract constructor functionality
+    // similar to the ERC20 smart contract constructor
     pub fn init(sender: T::AccountId) -> Result {
         ensure!(Self::is_init() == false, "Token already initialized.");
 
@@ -157,7 +163,7 @@ impl<T: Trait> Module<T> {
     ) -> Result {
         ensure!(<BalanceOf<T>>::exists(from.clone()), "Account does not own this token");
         let sender_balance = Self::balance_of(from.clone());
-        ensure!(sender_balance > value, "Not enough balance.");
+        ensure!(sender_balance >= value, "Not enough balance.");
         let updated_from_balance = sender_balance.checked_sub(&value).ok_or("overflow in calculating balance")?;
         let receiver_balance = Self::balance_of(to.clone());
         let updated_to_balance = receiver_balance.checked_add(&value).ok_or("overflow in calculating balance")?;
