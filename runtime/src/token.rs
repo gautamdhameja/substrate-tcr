@@ -101,11 +101,11 @@ decl_event!(
 );
 
 /// All functions in the decl_module macro become part of the public interface of the module
-/// If they are there, they are accessible via extricsic calls whether they are pub or not
-/// However, in the impl module section (this) the functions can be public and private
+/// If they are there, they are accessible via extrinsics calls whether they are public or not
+/// However, in the impl module section (this, below) the functions can be public and private
 /// Private functions are internal to this module e.g.: _transfer
-/// Public functions can be called from other modules - lock and unlock from the tcr module
-/// All functions in the impl module section are not part of public interface because they are not part of Call enum
+/// Public functions can be called from other modules e.g.: lock and unlock (being called from the tcr module)
+/// All functions in the impl module section are not part of public interface because they are not part of the Call enum
 impl<T: Trait> Module<T> {
     // initialize the token
     // transfers the total_supply amout to the caller
