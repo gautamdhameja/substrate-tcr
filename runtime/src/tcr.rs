@@ -1,5 +1,6 @@
 use rstd::prelude::*;
 use runtime_io;
+use parity_codec_derive::{Encode, Decode};
 use runtime_primitives::traits::{Hash, As, CheckedDiv, CheckedMul, CheckedAdd};
 use support::{dispatch::Result, StorageMap, StorageValue, decl_storage, decl_module, decl_event, ensure};
 use {system::ensure_signed, timestamp};
@@ -53,6 +54,59 @@ pub struct Poll<T, U> {
   votes_against: U,
   passed: bool,
 }
+
+// storage
+decl_storage! {
+  trait Store for Module<T: Trait> as Tcr {
+    // stores the owner in the genesis config
+    Owner get(owner) config(): T::AccountId;
+    // stores a list of admins who can set config
+    Admins get(admins): map T::AccountId => bool;
+    // TCR parameter - minimum deposit
+    MinDeposit get(min_deposit) config(): Option<T::TokenBalance>;
+    // TCR parameter - apply stage length - deadline for challenging before a listing gets accepted
+    ApplyStageLen get(apply_stage_len) config(): Option<T::Moment>;
+    // TCR parameter - commit stage length - deadline for voting before a challenge gets resolved
+    CommitStageLen get(commit_stage_len) config(): Option<T::Moment>;
+    // the TCR - list of proposals
+    Listings get(listings): map T::Hash => Listing<T::TokenBalance, T::AccountId, T::Moment>;
+    // to make querying of listings easier, maintaining a list of indexes and corresponding listing hashes
+    ListingCount get(listing_count): u32;
+    ListingIndexHash get(index_hash): map u32 => T::Hash;
+    // global nonce for poll count
+    PollNonce get(poll_nonce) config(): u32;
+    // challenges
+    Challenges get(challenges): map u32 => Challenge<T::Hash, T::TokenBalance, T::AccountId, T::Moment>;
+    // polls
+    Polls get(polls): map u32 => Poll<T::Hash, T::TokenBalance>;
+    // votes
+    // mapping is between a poll id and a vec of votes
+    // poll and vote have a 1:n relationship
+    Votes get(votes): map (u32, T::AccountId) => Vote<T::TokenBalance>;
+  }
+}
+
+// events
+decl_event!(
+    pub enum Event<T> where AccountId = <T as system::Trait>::AccountId, 
+    Balance = <T as token::Trait>::TokenBalance, 
+    Hash = <T as system::Trait>::Hash {
+      // when a listing is proposed
+      Proposed(AccountId, Hash, Balance),
+      // when a listing is challenged
+      Challenged(AccountId, Hash, u32, Balance),
+      // when a challenge is voted on
+      Voted(AccountId, u32, Balance),
+      // when a challenge is resolved
+      Resolved(Hash, u32),
+      // when a listing is accepted in the registry
+      Accepted(Hash),
+      // when a listing is rejected from the registry
+      Rejected(Hash),
+      // when a vote reward is claimed for a challenge
+      Claimed(AccountId, u32),
+    }
+);
 
 // module declaration
 // public interface
@@ -397,59 +451,6 @@ decl_module! {
   }
 }
 
-// events
-decl_event!(
-    pub enum Event<T> where AccountId = <T as system::Trait>::AccountId, 
-    Balance = <T as token::Trait>::TokenBalance, 
-    Hash = <T as system::Trait>::Hash {
-      // when a listing is proposed
-      Proposed(AccountId, Hash, Balance),
-      // when a listing is challenged
-      Challenged(AccountId, Hash, u32, Balance),
-      // when a challenge is voted on
-      Voted(AccountId, u32, Balance),
-      // when a challenge is resolved
-      Resolved(Hash, u32),
-      // when a listing is accepted in the registry
-      Accepted(Hash),
-      // when a listing is rejected from the registry
-      Rejected(Hash),
-      // when a vote reward is claimed for a challenge
-      Claimed(AccountId, u32),
-    }
-);
-
-// storage
-decl_storage! {
-  trait Store for Module<T: Trait> as Tcr {
-    // stores the owner in the genesis config
-    Owner get(owner) config(): T::AccountId;
-    // stores a list of admins who can set config
-    Admins get(admins): map T::AccountId => bool;
-    // TCR parameter - minimum deposit
-    MinDeposit get(min_deposit) config(): Option<T::TokenBalance>;
-    // TCR parameter - apply stage length - deadline for challenging before a listing gets accepted
-    ApplyStageLen get(apply_stage_len) config(): Option<T::Moment>;
-    // TCR parameter - commit stage length - deadline for voting before a challenge gets resolved
-    CommitStageLen get(commit_stage_len) config(): Option<T::Moment>;
-    // the TCR - list of proposals
-    Listings get(listings): map T::Hash => Listing<T::TokenBalance, T::AccountId, T::Moment>;
-    // to make querying of listings easier, maintaining a list of indexes and corresponding listing hashes
-    ListingCount get(listing_count): u32;
-    ListingIndexHash get(index_hash): map u32 => T::Hash;
-    // global nonce for poll count
-    PollNonce get(poll_nonce) config(): u32;
-    // challenges
-    Challenges get(challenges): map u32 => Challenge<T::Hash, T::TokenBalance, T::AccountId, T::Moment>;
-    // polls
-    Polls get(polls): map u32 => Poll<T::Hash, T::TokenBalance>;
-    // votes
-    // mapping is between a poll id and a vec of votes
-    // poll and vote have a 1:n relationship
-    Votes get(votes): map (u32, T::AccountId) => Vote<T::TokenBalance>;
-  }
-}
-
 // implementation of mudule
 // utility and private functions
 impl<T: Trait> Module<T> {
@@ -462,4 +463,117 @@ impl<T: Trait> Module<T> {
 
       Ok(())
     }
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	use runtime_io::with_externalities;
+	use primitives::{H256, Blake2Hasher};
+	use support::{impl_outer_origin, assert_ok, assert_noop};
+	use runtime_primitives::{
+		BuildStorage,
+		traits::{BlakeTwo256, IdentityLookup},
+		testing::{Digest, DigestItem, Header, UintAuthorityId}
+	};
+
+	impl_outer_origin! {
+		pub enum Origin for Test {}
+	}
+
+	// For testing the module, we construct most of a mock runtime. This means
+	// first constructing a configuration type (`Test`) which `impl`s each of the
+	// configuration traits of modules we want to use.
+	#[derive(Clone, Eq, PartialEq)]
+	pub struct Test;
+	impl system::Trait for Test {
+		type Origin = Origin;
+		type Index = u64;
+		type BlockNumber = u64;
+		type Hash = H256;
+		type Hashing = BlakeTwo256;
+		type Digest = Digest;
+		type AccountId = u64;
+		type Lookup = IdentityLookup<u64>;
+		type Header = Header;
+		type Event = ();
+		type Log = DigestItem;
+	}
+  impl consensus::Trait for Test {
+		type Log = DigestItem;
+		type SessionKey = UintAuthorityId;
+		type InherentOfflineReport = ();
+	}
+  impl token::Trait for Test {
+    type Event = ();
+    type TokenBalance = u64;
+  }
+  impl timestamp::Trait for Test {
+    type Moment = u64;
+    type OnTimestampSet = ();
+  }
+  impl Trait for Test {
+		type Event = ();
+	}
+	type Tcr = Module<Test>;
+  type Token = token::Module<Test>;
+
+	// builds the genesis config store and sets mock values
+	fn new_test_ext() -> runtime_io::TestExternalities<Blake2Hasher> {
+		let mut t = system::GenesisConfig::<Test>::default().build_storage().unwrap().0;
+    t.extend(
+			token::GenesisConfig::<Test> {
+				total_supply: 1000
+			}.build_storage().unwrap().0);
+		t.extend(GenesisConfig::<Test> {
+      owner: 1,
+			min_deposit: 100,
+      apply_stage_len: 10,
+      commit_stage_len: 10,
+      poll_nonce: 1
+		}.build_storage().unwrap().0);
+    t.into()
+	}
+
+	#[test]
+	fn should_fail_low_deposit() {
+    with_externalities(&mut new_test_ext(), || {
+			assert_noop!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 99), "deposit should be more than min_deposit");
+		});
+	}
+
+  #[test]
+  fn should_init() {
+    with_externalities(&mut new_test_ext(), || {
+      assert_ok!(Tcr::init(Origin::signed(1)));
+		});
+	}
+
+  #[test]
+  fn should_pass_propose() {
+    with_externalities(&mut new_test_ext(), || {
+      assert_ok!(Tcr::init(Origin::signed(1)));
+			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
+		});
+	}
+
+  #[test]
+  fn should_fail_challenge_same_owner() {
+    with_externalities(&mut new_test_ext(), || {
+      assert_ok!(Tcr::init(Origin::signed(1)));
+			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
+      assert_noop!(Tcr::challenge(Origin::signed(1), 0, 101), "You cannot challenge your own listing.");
+		});
+	}
+
+  #[test]
+  fn should_pass_challenge() {
+    with_externalities(&mut new_test_ext(), || {
+      assert_ok!(Tcr::init(Origin::signed(1)));
+			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
+      assert_ok!(Token::transfer(Origin::signed(1), 2, 200));
+      assert_ok!(Tcr::challenge(Origin::signed(2), 0, 101));
+		});
+	}
 }
