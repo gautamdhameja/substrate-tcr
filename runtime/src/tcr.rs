@@ -1,10 +1,12 @@
+use crate::token;
+use parity_codec_derive::{Decode, Encode};
 use rstd::prelude::*;
 use runtime_io;
-use parity_codec_derive::{Encode, Decode};
-use runtime_primitives::traits::{Hash, As, CheckedDiv, CheckedMul, CheckedAdd};
-use support::{dispatch::Result, StorageMap, StorageValue, decl_storage, decl_module, decl_event, ensure};
+use runtime_primitives::traits::{As, CheckedAdd, CheckedDiv, CheckedMul, Hash};
+use support::{
+  decl_event, decl_module, decl_storage, dispatch::Result, ensure, StorageMap, StorageValue,
+};
 use {system::ensure_signed, timestamp};
-use crate::token;
 
 // Read TCR concepts here
 // https://www.gautamdhameja.com/token-curated-registries-explain-eli5-a5d4cce0ddbe/
@@ -35,7 +37,7 @@ pub struct Challenge<T, U, V, W> {
   voting_ends: W,
   resolved: bool,
   reward_pool: U,
-  total_tokens: U
+  total_tokens: U,
 }
 
 #[derive(Encode, Decode, Default, Clone, PartialEq, Debug)]
@@ -88,24 +90,24 @@ decl_storage! {
 
 // events
 decl_event!(
-    pub enum Event<T> where AccountId = <T as system::Trait>::AccountId, 
-    Balance = <T as token::Trait>::TokenBalance, 
-    Hash = <T as system::Trait>::Hash {
-      // when a listing is proposed
-      Proposed(AccountId, Hash, Balance),
-      // when a listing is challenged
-      Challenged(AccountId, Hash, u32, Balance),
-      // when a challenge is voted on
-      Voted(AccountId, u32, Balance),
-      // when a challenge is resolved
-      Resolved(Hash, u32),
-      // when a listing is accepted in the registry
-      Accepted(Hash),
-      // when a listing is rejected from the registry
-      Rejected(Hash),
-      // when a vote reward is claimed for a challenge
-      Claimed(AccountId, u32),
-    }
+  pub enum Event<T> where AccountId = <T as system::Trait>::AccountId, 
+  Balance = <T as token::Trait>::TokenBalance, 
+  Hash = <T as system::Trait>::Hash {
+    // when a listing is proposed
+    Proposed(AccountId, Hash, Balance),
+    // when a listing is challenged
+    Challenged(AccountId, Hash, u32, Balance),
+    // when a challenge is voted on
+    Voted(AccountId, u32, Balance),
+    // when a challenge is resolved
+    Resolved(Hash, u32),
+    // when a listing is accepted in the registry
+    Accepted(Hash),
+    // when a listing is rejected from the registry
+    Rejected(Hash),
+    // when a vote reward is claimed for a challenge
+    Claimed(AccountId, u32),
+  }
 );
 
 // module declaration
@@ -133,13 +135,13 @@ decl_module! {
     // checks if the stake is less than minimum deposit needed
     fn propose(origin, data: Vec<u8>, deposit: T::TokenBalance) -> Result {
       let sender = ensure_signed(origin)?;
-      
+
       // to avoid byte arrays with unlimited length
       ensure!(data.len() <= 256, "listing data cannot be more than 256 bytes");
-      
+
       let min_deposit = Self::min_deposit().ok_or("Min deposit not set")?;
       ensure!(deposit >= min_deposit, "deposit should be more than min_deposit");
-      
+
       // set application expiry for the listing
       // using the `Timestamp` SRML module for getting the block timestamp
       // generating a future timestamp by adding the apply stage length
@@ -186,16 +188,16 @@ decl_module! {
     //    b. if enough deposit is sent for challenge
     fn challenge(origin, listing_id: u32, deposit: T::TokenBalance) -> Result {
       let sender = ensure_signed(origin)?;
-      
+
       ensure!(<ListingIndexHash<T>>::exists(listing_id), "Listing not found.");
-      
+
       let listing_hash = Self::index_hash(listing_id);
       let listing = Self::listings(listing_hash);
 
       ensure!(listing.challenge_id == 0, "Listing is already challenged.");
       ensure!(listing.owner != sender, "You cannot challenge your own listing.");
       ensure!(deposit >= listing.deposit, "Not enough deposit to challenge.");
-      
+
       // get current time
       let now = <timestamp::Module<T>>::get();
 
@@ -302,7 +304,7 @@ decl_module! {
     // updates the listing status
     fn resolve(_origin, listing_id: u32) -> Result {
       ensure!(<ListingIndexHash<T>>::exists(listing_id), "Listing not found.");
-      
+
       let listing_hash = Self::index_hash(listing_id);
       let listing = Self::listings(listing_hash);
 
@@ -322,9 +324,9 @@ decl_module! {
         // no challenge
         // check if apply stage length has passed
         ensure!(listing.application_expiry < now, "Apply stage length has not passed.");
-        
+
         // update listing status
-        <Listings<T>>::mutate(listing_hash, |listing| 
+        <Listings<T>>::mutate(listing_hash, |listing|
         {
           listing.whitelisted = true;
         });
@@ -394,13 +396,13 @@ decl_module! {
       ensure!(vote.claimed == false, "Vote reward has already been claimed.");
 
       // if winning party, calculate reward and transfer
-      if (poll.passed == true && vote.value == true) || 
+      if (poll.passed == true && vote.value == true) ||
           (poll.passed == false && vote.value == false) {
             let reward_ratio = challenge.reward_pool.checked_div(&challenge.total_tokens).ok_or("overflow in calculating reward")?;
             let reward = reward_ratio.checked_mul(&vote.deposit).ok_or("overflow in calculating reward")?;
             let total = reward.checked_add(&vote.deposit).ok_or("overflow in calculating reward")?;
             <token::Module<T>>::unlock(sender.clone(), total, challenge.listing_hash)?;
-            
+
             Self::deposit_event(RawEvent::Claimed(sender.clone(), challenge_id));
         }
 
@@ -454,57 +456,57 @@ decl_module! {
 // implementation of mudule
 // utility and private functions
 impl<T: Trait> Module<T> {
-    // ensure that a user is an admin
-    fn ensure_admin(origin: T::Origin) -> Result {
-      let sender = ensure_signed(origin)?;
+  // ensure that a user is an admin
+  fn ensure_admin(origin: T::Origin) -> Result {
+    let sender = ensure_signed(origin)?;
 
-      ensure!(<Admins<T>>::exists(&sender), "Access denied. Admin only.");
-      ensure!(Self::admins(sender) == true, "Admin is not active");
+    ensure!(<Admins<T>>::exists(&sender), "Access denied. Admin only.");
+    ensure!(Self::admins(sender) == true, "Admin is not active");
 
-      Ok(())
-    }
+    Ok(())
+  }
 }
 
 #[cfg(test)]
 mod tests {
-	use super::*;
+  use super::*;
 
-	use runtime_io::with_externalities;
-	use primitives::{H256, Blake2Hasher};
-	use support::{impl_outer_origin, assert_ok, assert_noop};
-	use runtime_primitives::{
-		BuildStorage,
-		traits::{BlakeTwo256, IdentityLookup},
-		testing::{Digest, DigestItem, Header, UintAuthorityId}
-	};
+  use primitives::{Blake2Hasher, H256};
+  use runtime_io::with_externalities;
+  use runtime_primitives::{
+    testing::{Digest, DigestItem, Header, UintAuthorityId},
+    traits::{BlakeTwo256, IdentityLookup},
+    BuildStorage,
+  };
+  use support::{assert_noop, assert_ok, impl_outer_origin};
 
-	impl_outer_origin! {
-		pub enum Origin for Test {}
-	}
+  impl_outer_origin! {
+    pub enum Origin for Test {}
+  }
 
-	// For testing the module, we construct most of a mock runtime. This means
-	// first constructing a configuration type (`Test`) which `impl`s each of the
-	// configuration traits of modules we want to use.
-	#[derive(Clone, Eq, PartialEq)]
-	pub struct Test;
-	impl system::Trait for Test {
-		type Origin = Origin;
-		type Index = u64;
-		type BlockNumber = u64;
-		type Hash = H256;
-		type Hashing = BlakeTwo256;
-		type Digest = Digest;
-		type AccountId = u64;
-		type Lookup = IdentityLookup<u64>;
-		type Header = Header;
-		type Event = ();
-		type Log = DigestItem;
-	}
+  // For testing the module, we construct most of a mock runtime. This means
+  // first constructing a configuration type (`Test`) which `impl`s each of the
+  // configuration traits of modules we want to use.
+  #[derive(Clone, Eq, PartialEq)]
+  pub struct Test;
+  impl system::Trait for Test {
+    type Origin = Origin;
+    type Index = u64;
+    type BlockNumber = u64;
+    type Hash = H256;
+    type Hashing = BlakeTwo256;
+    type Digest = Digest;
+    type AccountId = u64;
+    type Lookup = IdentityLookup<u64>;
+    type Header = Header;
+    type Event = ();
+    type Log = DigestItem;
+  }
   impl consensus::Trait for Test {
-		type Log = DigestItem;
-		type SessionKey = UintAuthorityId;
-		type InherentOfflineReport = ();
-	}
+    type Log = DigestItem;
+    type SessionKey = UintAuthorityId;
+    type InherentOfflineReport = ();
+  }
   impl token::Trait for Test {
     type Event = ();
     type TokenBalance = u64;
@@ -514,66 +516,94 @@ mod tests {
     type OnTimestampSet = ();
   }
   impl Trait for Test {
-		type Event = ();
-	}
-	type Tcr = Module<Test>;
+    type Event = ();
+  }
+  type Tcr = Module<Test>;
   type Token = token::Module<Test>;
 
-	// builds the genesis config store and sets mock values
-	fn new_test_ext() -> runtime_io::TestExternalities<Blake2Hasher> {
-		let mut t = system::GenesisConfig::<Test>::default().build_storage().unwrap().0;
+  // builds the genesis config store and sets mock values
+  fn new_test_ext() -> runtime_io::TestExternalities<Blake2Hasher> {
+    let mut t = system::GenesisConfig::<Test>::default()
+      .build_storage()
+      .unwrap()
+      .0;
     t.extend(
-			token::GenesisConfig::<Test> {
-				total_supply: 1000
-			}.build_storage().unwrap().0);
-		t.extend(GenesisConfig::<Test> {
-      owner: 1,
-			min_deposit: 100,
-      apply_stage_len: 10,
-      commit_stage_len: 10,
-      poll_nonce: 1
-		}.build_storage().unwrap().0);
+      token::GenesisConfig::<Test> { total_supply: 1000 }
+        .build_storage()
+        .unwrap()
+        .0,
+    );
+    t.extend(
+      GenesisConfig::<Test> {
+        owner: 1,
+        min_deposit: 100,
+        apply_stage_len: 10,
+        commit_stage_len: 10,
+        poll_nonce: 1,
+      }
+      .build_storage()
+      .unwrap()
+      .0,
+    );
     t.into()
-	}
+  }
 
-	#[test]
-	fn should_fail_low_deposit() {
+  #[test]
+  fn should_fail_low_deposit() {
     with_externalities(&mut new_test_ext(), || {
-			assert_noop!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 99), "deposit should be more than min_deposit");
-		});
-	}
+      assert_noop!(
+        Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 99),
+        "deposit should be more than min_deposit"
+      );
+    });
+  }
 
   #[test]
   fn should_init() {
     with_externalities(&mut new_test_ext(), || {
       assert_ok!(Tcr::init(Origin::signed(1)));
-		});
-	}
+    });
+  }
 
   #[test]
   fn should_pass_propose() {
     with_externalities(&mut new_test_ext(), || {
       assert_ok!(Tcr::init(Origin::signed(1)));
-			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
-		});
-	}
+      assert_ok!(Tcr::propose(
+        Origin::signed(1),
+        "ListingItem1".as_bytes().into(),
+        101
+      ));
+    });
+  }
 
   #[test]
   fn should_fail_challenge_same_owner() {
     with_externalities(&mut new_test_ext(), || {
       assert_ok!(Tcr::init(Origin::signed(1)));
-			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
-      assert_noop!(Tcr::challenge(Origin::signed(1), 0, 101), "You cannot challenge your own listing.");
-		});
-	}
+      assert_ok!(Tcr::propose(
+        Origin::signed(1),
+        "ListingItem1".as_bytes().into(),
+        101
+      ));
+      assert_noop!(
+        Tcr::challenge(Origin::signed(1), 0, 101),
+        "You cannot challenge your own listing."
+      );
+    });
+  }
 
   #[test]
   fn should_pass_challenge() {
     with_externalities(&mut new_test_ext(), || {
       assert_ok!(Tcr::init(Origin::signed(1)));
-			assert_ok!(Tcr::propose(Origin::signed(1), "ListingItem1".as_bytes().into(), 101));
+      assert_ok!(Tcr::propose(
+        Origin::signed(1),
+        "ListingItem1".as_bytes().into(),
+        101
+      ));
       assert_ok!(Token::transfer(Origin::signed(1), 2, 200));
       assert_ok!(Tcr::challenge(Origin::signed(2), 0, 101));
-		});
-	}
+    });
+  }
 }
