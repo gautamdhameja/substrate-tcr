@@ -133,7 +133,7 @@ decl_module! {
     // takes the listing name (data) as a byte vector
     // takes deposit as stake backing the listing
     // checks if the stake is less than minimum deposit needed
-    fn propose(origin, data: Vec<u8>, deposit: T::TokenBalance) -> Result {
+    fn propose(origin, data: Vec<u8>, #[compact] deposit: T::TokenBalance) -> Result {
       let sender = ensure_signed(origin)?;
 
       // to avoid byte arrays with unlimited length
@@ -186,7 +186,7 @@ decl_module! {
     //    a. if the listing exists
     //    c. if the challenger is not the owner of the listing
     //    b. if enough deposit is sent for challenge
-    fn challenge(origin, listing_id: u32, deposit: T::TokenBalance) -> Result {
+    fn challenge(origin, listing_id: u32, #[compact] deposit: T::TokenBalance) -> Result {
       let sender = ensure_signed(origin)?;
 
       ensure!(<ListingIndexHash<T>>::exists(listing_id), "Listing not found.");
@@ -255,7 +255,7 @@ decl_module! {
     // checks if the listing is challenged and
     // if the commit stage length has not passed
     // to keep it simple, we just store the choice as a bool - true: aye; false: nay
-    fn vote(origin, challenge_id: u32, value: bool, deposit: T::TokenBalance) -> Result {
+    fn vote(origin, challenge_id: u32, value: bool, #[compact] deposit: T::TokenBalance) -> Result {
       let sender = ensure_signed(origin)?;
 
       // check if listing is challenged

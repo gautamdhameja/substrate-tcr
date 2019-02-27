@@ -23,14 +23,14 @@ decl_module! {
       fn deposit_event<T>() = default;
 
       // transfer tokens from one account to another
-      pub fn transfer(origin, to: T::AccountId, value: T::TokenBalance) -> Result {
+      pub fn transfer(origin, to: T::AccountId, #[compact] value: T::TokenBalance) -> Result {
           let sender = ensure_signed(origin)?;
           Self::_transfer(sender, to, value)
       }
 
       // approve token transfer from one account to another
       // once this is done, then transfer_from can be called with corresponding values
-      pub fn approve(origin, spender: T::AccountId, value: T::TokenBalance) -> Result {
+      pub fn approve(origin, spender: T::AccountId, #[compact] value: T::TokenBalance) -> Result {
           let sender = ensure_signed(origin)?;
           // make sure the approver/owner owns this token
           ensure!(<BalanceOf<T>>::exists(&sender), "Account does not own this token");
@@ -52,7 +52,7 @@ decl_module! {
       }
 
       // if approved, transfer from an account to another account without needing owner's signature
-      pub fn transfer_from(_origin, from: T::AccountId, to: T::AccountId, value: T::TokenBalance) -> Result {
+      pub fn transfer_from(_origin, from: T::AccountId, to: T::AccountId, #[compact] value: T::TokenBalance) -> Result {
           ensure!(<Allowance<T>>::exists((from.clone(), to.clone())), "Allowance does not exist.");
           let allowance = Self::allowance((from.clone(), to.clone()));
           ensure!(allowance >= value, "Not enough allowance.");
