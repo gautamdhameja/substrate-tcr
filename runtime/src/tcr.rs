@@ -396,8 +396,7 @@ decl_module! {
       ensure!(vote.claimed == false, "Vote reward has already been claimed.");
 
       // if winning party, calculate reward and transfer
-      if (poll.passed == true && vote.value == true) ||
-          (poll.passed == false && vote.value == false) {
+      if poll.passed == vote.value {
             let reward_ratio = challenge.reward_pool.checked_div(&challenge.total_tokens).ok_or("overflow in calculating reward")?;
             let reward = reward_ratio.checked_mul(&vote.deposit).ok_or("overflow in calculating reward")?;
             let total = reward.checked_add(&vote.deposit).ok_or("overflow in calculating reward")?;
