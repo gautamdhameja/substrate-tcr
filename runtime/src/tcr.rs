@@ -16,7 +16,8 @@ pub trait Trait: timestamp::Trait + token::Trait {
   type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
-#[derive(Encode, Decode, Default, Clone, PartialEq, Debug)]
+#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Encode, Decode, Default, Clone, PartialEq)]
 // generic type parameters - Balance, AccountId, timestamp::Moment
 pub struct Listing<U, V, W> {
   id: u32,
@@ -28,7 +29,8 @@ pub struct Listing<U, V, W> {
   challenge_id: u32,
 }
 
-#[derive(Encode, Decode, Default, Clone, PartialEq, Debug)]
+#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Encode, Decode, Default, Clone, PartialEq)]
 // generic type parameters - Balance, AccountId, timestamp::Moment
 pub struct Challenge<T, U, V, W> {
   listing_hash: T,
@@ -40,7 +42,8 @@ pub struct Challenge<T, U, V, W> {
   total_tokens: U,
 }
 
-#[derive(Encode, Decode, Default, Clone, PartialEq, Debug)]
+#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Encode, Decode, Default, Clone, PartialEq)]
 // generic type parameters - Balance
 pub struct Vote<U> {
   value: bool,
@@ -48,7 +51,8 @@ pub struct Vote<U> {
   claimed: bool,
 }
 
-#[derive(Encode, Decode, Default, Clone, PartialEq, Debug)]
+#[cfg_attr(feature = "std", derive(Debug))]
+#[derive(Encode, Decode, Default, Clone, PartialEq)]
 // generic type parameters - Balance
 pub struct Poll<T, U> {
   listing_hash: T,
