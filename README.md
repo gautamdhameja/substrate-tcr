@@ -1,6 +1,6 @@
 # Substrate - Token Curated Registries
 
-An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase.
+An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase. The full tutorial for this sample can be found [here](https://docs.substrate.dev/docs/building-a-token-curated-registry-dappchain-using-substrate).
 
 The TCR runtime is implemented as a multi-module runtime with following two modules.
 
