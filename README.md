@@ -1,68 +1,65 @@
-# substrate-tcr
+# Substrate - Token Curated Registries
 
-A new SRML-based Substrate node, ready for hacking.
+An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase. The full tutorial for this sample can be found [here](https://substrate.dev/docs/en/tutorials/tcr/introduction).
 
-# Building
+The TCR runtime is implemented as a multi-module runtime with following two modules.
 
-Install Rust:
+1. **tcr.rs** - The main module with all curation and initialization functions. The module implements a simple-TCR as described and implemented [here](https://github.com/gautamdhameja/simple-tcr). The full TCR functionality in not implemented but only basic curation functions are.
+2. **token.rs** - Implementation of the modified ERC20 interface to serve as the native token for the TCR module. There are some additional functions implemented for locking and unlocking of tokens.
 
-```bash
-curl https://sh.rustup.rs -sSf | sh
+## Usage
+
+### Step 0
+
+If you are new to [Substrate](https://www.parity.io/substrate/), please go through the [getting started tutorial](https://substrate.dev/docs/en/tutorials/creating-your-first-substrate-chain) first. It will give you a sense of how the code is structured in a `substrate-node-template` and how to get it up and running.
+
+This will also ensure that you have Rust and Substrate installed on your system.
+
+### Step 1
+
+Clone this repository. Inside the directory where you have cloned, run the following commands,
+
+* To build the `WASM` runtime for the node (**run this first**),
+
 ```
-
-Install required tools:
-
-```bash
-./scripts/init.sh
-```
-
-Build the WebAssembly binary:
-
-```bash
 ./scripts/build.sh
 ```
 
-Build all native code:
+* To build the rust code and the node (**run this after `./scripts/build.sh` completes**),
 
-```bash
-cargo build
+```
+cargo build --release
 ```
 
-# Run
+* To start the node
 
-You can start a development chain with:
-
-```bash
-cargo run -- --dev
+```
+./target/release/substrate-tcr --dev
 ```
 
-Detailed logs may be shown by running the node with the following environment variables set: `RUST_LOG=debug RUST_BACKTRACE=1 cargo run -- --dev`.
+A local Substrate node with the TCR runtime should be up and running at `localhost:9944`.
 
-If you want to see the multi-node consensus algorithm in action locally, then you can create a local testnet with two validator nodes for Alice and Bob, who are the initial authorities of the genesis chain that have been endowed with testnet units. Give each node a name and expose them so they are listed on the Polkadot [telemetry site](https://telemetry.polkadot.io/#/Local%20Testnet). You'll need two terminal windows open.
+### Step 2 (UI)
 
-We'll start Alice's substrate node first on default TCP port 30333 with her chain database stored locally at `/tmp/alice`. The bootnode ID of her node is `QmQZ8TjTqeDj3ciwr93EJ95hxfDsb9pEYDizUAbWpigtQN`, which is generated from the `--node-key` value that we specify below:
+You can either use the [Substrate-TCR-UI](https://github.com/parity-samples/substrate-tcr-ui) to connect with this runtime or you can try it out using the [Polkadot Apps UI](https://polkadot.js.org/apps/).
 
-```bash
-cargo run -- \
-  --base-path /tmp/alice \
-  --chain=local \
-  --alice \
-  --node-key 0000000000000000000000000000000000000000000000000000000000000001 \
-  --telemetry-url ws://telemetry.polkadot.io:1024 \
-  --validator
+To try it with the [Polkadot Apps UI](https://polkadot.js.org/apps/), follow the following steps,
+
+* Once the local node is running, open the following in your browser,
+
+```
+https://polkadot.js.org/apps/
 ```
 
-In the second terminal, we'll start Bob's substrate node on a different TCP port of 30334, and with his chain database stored locally at `/tmp/bob`. We'll specify a value for the `--bootnodes` option that will connect his node to Alice's bootnode ID on TCP port 30333:
+* Go to the settings page and select `Local Node` in the `remote node/endpoint to connect to` input. Click `Save & Reload`.
 
-```bash
-cargo run -- \
-  --base-path /tmp/bob \
-  --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/QmQZ8TjTqeDj3ciwr93EJ95hxfDsb9pEYDizUAbWpigtQN \
-  --chain=local \
-  --bob \
-  --port 30334 \
-  --telemetry-url ws://telemetry.polkadot.io:1024 \
-  --validator
-```
+For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/substrate-developer-hub/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
 
-Additional CLI usage options are available and may be shown by running `cargo run -- --help`.
+### Important Note
+
+The Substrate framework, related libraries and APIs are rapidly evolving. In case this module does not work with the latest Substrate build, please submit an issue in this repo.
+You can also try porting the runtime module into a freshly cloned `substrate-node-template` codebase.
+
+## Disclaimer
+
+This code is just a sample for learning purposes. It is not audited and reviewed for production use cases. You can expect bugs and security vulnerabilities. Do **not** use it as-is in real applications.

@@ -1,5 +1,5 @@
 use crate::token;
-use parity_codec_derive::{Decode, Encode};
+use parity_codec::{Decode, Encode};
 use rstd::prelude::*;
 use runtime_io;
 use runtime_primitives::traits::{As, CheckedAdd, CheckedDiv, CheckedMul, Hash};

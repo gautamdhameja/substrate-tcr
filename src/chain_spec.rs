@@ -1,7 +1,7 @@
 use primitives::{ed25519, sr25519, Pair};
 use substrate_tcr_runtime::{
 	AccountId, GenesisConfig, ConsensusConfig, TimestampConfig, BalancesConfig,
-	SudoConfig, IndicesConfig,
+	SudoConfig, IndicesConfig, TokenConfig, TcrConfig,
 };
 use substrate_service;
 
@@ -115,5 +115,21 @@ fn testnet_genesis(initial_authorities: Vec<AuthorityId>, endowed_accounts: Vec<
 		sudo: Some(SudoConfig {
 			key: root_key,
 		}),
+		token: Some(TokenConfig {
+			// setting total supply of tokens to 21M because `Satoshi` said so
+			total_supply: 21000000,
+		}),
+		tcr: Some(TcrConfig {
+			owner: account_key("Alice"),
+			// min deposit for proposals
+			min_deposit: 100,
+			// challenge time limit - for testing its set to 2 mins (120 sec)
+			apply_stage_len: 120,
+			// voting time limit - for testing its set to 4 mins (240 sec)
+			commit_stage_len: 240,
+			// initial poll/challenge set to 1
+			// to avoid 0 values
+			poll_nonce: 1,
+		})
 	}
 }
