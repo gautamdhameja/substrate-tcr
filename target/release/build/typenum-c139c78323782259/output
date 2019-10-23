@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_OP=/home/gautam/code/substrate-tcr/target/release/build/typenum-c139c78323782259/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/gautam/code/substrate-tcr/target/release/build/typenum-c139c78323782259/out/op.rs
