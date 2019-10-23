@@ -1,0 +1,11 @@
+/home/gautam/code/substrate-tcr/target/rls/debug/deps/unicode_segmentation-b74e01ef45c62ca3.rmeta: /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/lib.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/grapheme.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/tables.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/word.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/sentence.rs
+
+/home/gautam/code/substrate-tcr/target/rls/debug/deps/libunicode_segmentation-b74e01ef45c62ca3.rlib: /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/lib.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/grapheme.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/tables.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/word.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/sentence.rs
+
+/home/gautam/code/substrate-tcr/target/rls/debug/deps/unicode_segmentation-b74e01ef45c62ca3.d: /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/lib.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/grapheme.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/tables.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/word.rs /home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/sentence.rs
+
+/home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/lib.rs:
+/home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/grapheme.rs:
+/home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/tables.rs:
+/home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/word.rs:
+/home/gautam/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-segmentation-1.3.0/src/sentence.rs:

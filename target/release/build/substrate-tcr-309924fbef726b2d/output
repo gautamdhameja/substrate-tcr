@@ -1,0 +1,2 @@
+cargo:rustc-env=VERGEN_SHA_SHORT=
+cargo:warning=Could not find `.git/HEAD` from manifest dir!

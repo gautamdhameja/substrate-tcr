@@ -1,0 +1,13 @@
+
+				[package]
+				name = "substrate-tcr-runtime-wasm"
+				version = "1.0.0"
+				edition = "2018"
+
+				[lib]
+				name = "substrate_tcr_runtime"
+				crate-type = ["cdylib"]
+
+				[dependencies]
+				wasm_project = { package = "substrate-tcr-runtime", path = "/home/gautam/code/substrate-tcr/runtime", default-features = false }
+			

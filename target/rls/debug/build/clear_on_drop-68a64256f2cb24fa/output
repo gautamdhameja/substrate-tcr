@@ -1,0 +1,24 @@
+TARGET = Some("x86_64-unknown-linux-gnu")
+OPT_LEVEL = Some("0")
+HOST = Some("x86_64-unknown-linux-gnu")
+CC_x86_64-unknown-linux-gnu = None
+CC_x86_64_unknown_linux_gnu = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-unknown-linux-gnu = None
+CFLAGS_x86_64_unknown_linux_gnu = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some("true")
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+running: "cc" "-O0" "-ffunction-sections" "-fdata-sections" "-fPIC" "-g" "-fno-omit-frame-pointer" "-m64" "-Wall" "-Wextra" "-o" "/home/gautam/code/substrate-tcr/target/rls/debug/build/clear_on_drop-68a64256f2cb24fa/out/src/hide.o" "-c" "src/hide.c"
+exit code: 0
+AR_x86_64-unknown-linux-gnu = None
+AR_x86_64_unknown_linux_gnu = None
+HOST_AR = None
+AR = None
+running: "ar" "crs" "/home/gautam/code/substrate-tcr/target/rls/debug/build/clear_on_drop-68a64256f2cb24fa/out/libclear_on_drop.a" "/home/gautam/code/substrate-tcr/target/rls/debug/build/clear_on_drop-68a64256f2cb24fa/out/src/hide.o"
+exit code: 0
+cargo:rustc-link-lib=static=clear_on_drop
+cargo:rustc-link-search=native=/home/gautam/code/substrate-tcr/target/rls/debug/build/clear_on_drop-68a64256f2cb24fa/out

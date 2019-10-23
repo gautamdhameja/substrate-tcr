@@ -1,0 +1,4 @@
+cargo:rerun-if-env-changed=SKIP_WASM_BUILD
+cargo:rerun-if-env-changed=BUILD_DUMMY_WASM_BINARY
+cargo:rerun-if-env-changed=TRIGGER_WASM_BUILD
+cargo:rerun-if-env-changed=SKIP_SUBSTRATE_TCR_RUNTIME_WASM_BUILD

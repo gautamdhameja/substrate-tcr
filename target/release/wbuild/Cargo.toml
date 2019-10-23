@@ -1,0 +1,9 @@
+[profile.dev]
+panic = 'abort'
+
+[profile.release]
+lto = true
+panic = 'abort'
+
+[workspace]
+members = ['substrate-tcr-runtime']

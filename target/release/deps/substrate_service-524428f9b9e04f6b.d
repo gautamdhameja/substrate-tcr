@@ -1,0 +1,11 @@
+/home/gautam/code/substrate-tcr/target/release/deps/substrate_service-524428f9b9e04f6b.rmeta: /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/lib.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/config.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/chain_ops.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/error.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/builder.rs
+
+/home/gautam/code/substrate-tcr/target/release/deps/libsubstrate_service-524428f9b9e04f6b.rlib: /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/lib.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/config.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/chain_ops.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/error.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/builder.rs
+
+/home/gautam/code/substrate-tcr/target/release/deps/substrate_service-524428f9b9e04f6b.d: /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/lib.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/config.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/chain_ops.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/error.rs /home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/builder.rs
+
+/home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/lib.rs:
+/home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/config.rs:
+/home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/chain_ops.rs:
+/home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/error.rs:
+/home/gautam/.cargo/git/checkouts/substrate-7e08433d4c370a21/acf86cd/core/service/src/builder.rs:

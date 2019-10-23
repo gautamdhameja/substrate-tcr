@@ -1,0 +1,1 @@
+{"rustc":10683586082858123265,"features":"[]","target":16015301406118973889,"profile":2574335274271406459,"path":12457724774028879226,"deps":[[661586579522962692,"libc",false,5329241282480213986]],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/fs-swap-7f600b6a58cc6cc2/dep-lib-fs_swap-7f600b6a58cc6cc2"}}],"rustflags":[],"metadata":12362734348825541483}

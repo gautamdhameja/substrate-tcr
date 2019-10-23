@@ -1,0 +1,1 @@
+{"rustc":10683586082858123265,"features":"[\"default\", \"derive\", \"serde_derive\", \"std\"]","target":10088282520713642473,"profile":9935990280773120926,"path":15787738658481146818,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/serde-f2c4d3f9fd8c10bd/dep-build-script-build_script_build-f2c4d3f9fd8c10bd"}}],"rustflags":[],"metadata":3767376778934503013}

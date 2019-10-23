@@ -1,0 +1,6 @@
+   Compiling wasm-build-runner-impl v1.0.0 (/home/gautam/code/substrate-tcr/target/release/wbuild-runner/substrate-tcr-runtime)
+    Finished release [optimized] target(s) in 0.44s
+     Running `/home/gautam/code/substrate-tcr/target/release/wbuild-runner/substrate-tcr-runtime/target/release/wasm-build-runner-impl`
+   Compiling substrate-tcr-runtime v2.0.0 (/home/gautam/code/substrate-tcr/runtime)
+   Compiling substrate-tcr-runtime-wasm v1.0.0 (/home/gautam/code/substrate-tcr/target/release/wbuild/substrate-tcr-runtime)
+    Finished release [optimized] target(s) in 32.04s
