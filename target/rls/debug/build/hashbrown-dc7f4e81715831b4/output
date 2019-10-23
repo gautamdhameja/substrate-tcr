@@ -1,1 +1,0 @@
-cargo:rustc-cfg=has_extern_crate_alloc

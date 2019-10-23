@@ -1,1 +1,0 @@
-{"rustc":10683586082858123265,"features":"[\"default\", \"env_logger\", \"log\", \"logging\"]","target":10088282520713642473,"profile":9935990280773120926,"path":1036565034381836230,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/bindgen-1314a0db5a7ee6c6/dep-build-script-build_script_build-1314a0db5a7ee6c6"}}],"rustflags":[],"metadata":12047033523087941064}
