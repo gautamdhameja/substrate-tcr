@@ -21,13 +21,13 @@ Clone this repository. Inside the directory where you have cloned, run the follo
 
 * To build the rust code and the node:
 
-```
+```bash
 cargo build --release
 ```
 
 * To start the node:
 
-```
+```bash
 ./target/release/substrate-tcr --dev
 ```
 

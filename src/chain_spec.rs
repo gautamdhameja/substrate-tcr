@@ -137,10 +137,10 @@ fn testnet_genesis(initial_authorities: Vec<(AuraId, GrandpaId)>,
 			owner: get_from_seed::<AccountId>("Alice"),
 			// min deposit for proposals
 			min_deposit: 100,
-			// challenge time limit - for testing its set to 2 mins (120 sec)
-			apply_stage_len: 120,
-			// voting time limit - for testing its set to 4 mins (240 sec)
-			commit_stage_len: 240,
+			// challenge time limit - for testing its set to 2 mins (120000 millis)
+			apply_stage_len: 120000,
+			// voting time limit - for testing its set to 4 mins (240000 millis)
+			commit_stage_len: 240000,
 			// initial poll/challenge set to 1
 			// to avoid 0 values
 			poll_nonce: 1,
