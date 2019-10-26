@@ -47,7 +47,7 @@ https://polkadot.js.org/apps/
 
 * Go to the settings page and select `Local Node` in the `remote node/endpoint to connect to` input. Click `Save & Reload`.
 
-For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/substrate-developer-hub/substrate-tcr/wiki/How-to-test-the-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
+For further instructions on using the runtime with the Polkadot Apps UI, please see this [wiki page](https://github.com/substrate-developer-hub/substrate-tcr/wiki/How-to-test-the-Substrate-TCR-runtime-using-Polkadot-Apps-Portal) in this repository.
 
 ## Disclaimer
 
