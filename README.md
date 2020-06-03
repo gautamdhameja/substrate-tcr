@@ -1,5 +1,7 @@
 # Substrate - Token Curated Registries
 
+> An updated version of the Substrate TCR runtime sample is available at - [https://github.com/substrate-developer-hub/tcr-substrate](https://github.com/substrate-developer-hub/tcr-substrate). In favor of that, this repository has been archived.
+
 An implementation of (a subset of) [Token Curated Registries](https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7) (TCR) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. Built using [substrate-node-template](https://github.com/paritytech/substrate/tree/master/node-template) codebase. The full tutorial for this sample can be found [here](https://substrate.dev/docs/en/tutorials/tcr/).
 
 The TCR runtime is implemented as a multi-module runtime with following two modules.
